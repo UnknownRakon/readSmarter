@@ -11,30 +11,31 @@ import com.vladislab.readsmarter.databinding.FragmentBooksBinding
 
 class BooksFragment : Fragment() {
 
-private var _binding: FragmentBooksBinding? = null
-  // This property is only valid between onCreateView and
-  // onDestroyView.
-  private val binding get() = _binding!!
+    private var _binding: FragmentBooksBinding? = null
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
-    val booksViewModel =
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val booksViewModel =
             ViewModelProvider(this).get(BooksViewModel::class.java)
 
-    _binding = FragmentBooksBinding.inflate(inflater, container, false)
-    val root: View = binding.root
+        _binding = FragmentBooksBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
-    val textView: TextView = binding.textDashboard
-    booksViewModel.text.observe(viewLifecycleOwner) {
-      textView.text = it
+        val textView: TextView = binding.textBooks
+        booksViewModel.text.observe(viewLifecycleOwner) {
+            textView.text = it
+        }
+        return root
     }
-    return root
-  }
 
-override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="active_red">#AE0F09</color>
     <color name="background_search">#F5F5F5</color>
+    <color name="background_card">#0DAE0F09</color>
 </resources>

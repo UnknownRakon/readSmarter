@@ -3,5 +3,9 @@
     <string name="title_catalog">Каталог</string>
     <string name="title_my_books">Мои книги</string>
     <string name="title_profile">Профиль</string>
+    <string name="catalog_title_text">Поиск</string>
+    <string name="arrow_back_description">Назад</string>
+    <string name="sort_description">Сортировать</string>
+    <string name="categories_title_text">Категории</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
