@@ -1,14 +1,13 @@
 package com.vladislab.readsmarter.ui.catalog
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.LinearLayout
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import com.vladislab.readsmarter.addChildFragment
 import com.vladislab.readsmarter.databinding.FragmentCatalogBinding
@@ -34,7 +33,8 @@ class CatalogFragment : Fragment() {
         _binding = FragmentCatalogBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-   
+        binding.booksSearchView.setOnQueryTextListener(search)
+
         return root
     }
 
@@ -48,5 +48,29 @@ class CatalogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private val search: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            binding.booksSearchView.layoutParams = LinearLayout.LayoutParams(
+                binding.booksSearchView.layoutParams.width,
+                binding.booksSearchView.layoutParams.height,
+                0.92f
+            )
+            binding.sortButton.visibility = View.VISIBLE
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            if (newText === null || newText.isEmpty()) {
+                binding.booksSearchView.layoutParams = LinearLayout.LayoutParams(
+                    binding.booksSearchView.layoutParams.width,
+                    binding.booksSearchView.layoutParams.height,
+                    1f
+                )
+                binding.sortButton.visibility = View.GONE
+            }
+            return false
+        }
     }
 }

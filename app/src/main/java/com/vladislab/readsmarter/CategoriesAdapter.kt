@@ -1,13 +1,12 @@
 package com.vladislab.readsmarter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoriesAdapter(var context: Context) :
+class CategoriesAdapter :
     RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     private var dataList = emptyList<String>()
@@ -20,6 +19,7 @@ class CategoriesAdapter(var context: Context) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView
+        var id: Int = 0
 
         init {
             title = itemView.findViewById(R.id.category_card_title)
@@ -31,7 +31,7 @@ class CategoriesAdapter(var context: Context) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CategoriesAdapter.ViewHolder {
+    ): ViewHolder {
 
         // Inflate the custom layout
         var view =
@@ -40,13 +40,14 @@ class CategoriesAdapter(var context: Context) :
     }
 
     // Involves populating data into the item through holder
-    override fun onBindViewHolder(holder: CategoriesAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         // Get the data model based on position
         var data = dataList[position]
 
         // Set item views based on your views and data model
         holder.title.text = data
+        holder.id = position
     }
 
     //  total count of items in the list
