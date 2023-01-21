@@ -8,9 +8,9 @@ import com.vladislab.readsmarter.api.books.Book
 import com.vladislab.readsmarter.api.books.BooksApi
 import com.vladislab.readsmarter.api.books.BooksApiInterface
 
-class SearchViewModel(private val query: String) : ViewModel() {
+class SearchViewModel(private val query: String?) : ViewModel() {
 
-    class Factory(private val query: String) : ViewModelProvider.Factory {
+    class Factory(private val query: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SearchViewModel(query) as T

@@ -23,16 +23,28 @@ class SearchFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private var dataList = mutableListOf<Book>()
-
+    private var query: String? = null
 
     private val binding get() = _binding!!
+
+    companion object {
+        fun newInstance(query: String) =
+            SearchFragment().apply {
+                arguments = Bundle().apply {
+                    putString("query", query)
+                }
+            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory("Красная") }
+        if (arguments?.getString("query") != null) {
+            query = arguments?.getString("query")
+        }
+        val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory(query) }
 
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root

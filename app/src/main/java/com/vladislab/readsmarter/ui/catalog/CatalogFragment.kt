@@ -73,14 +73,14 @@ class CatalogFragment : Fragment() {
     }
 
     private val search: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?): Boolean {
+        override fun onQueryTextSubmit(query: String): Boolean {
             binding.booksSearchView.layoutParams = LinearLayout.LayoutParams(
                 binding.booksSearchView.layoutParams.width,
                 binding.booksSearchView.layoutParams.height,
                 0.92f
             )
             binding.sortButton.visibility = View.VISIBLE
-            val childFragment = SearchFragment()
+            val childFragment = SearchFragment.newInstance(query)
             addChildFragment(childFragment, binding.subFragmentCatalog.id)
             return false
         }

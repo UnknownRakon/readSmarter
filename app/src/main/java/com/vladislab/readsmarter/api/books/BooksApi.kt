@@ -5,7 +5,7 @@ import com.vladislab.readsmarter.R
 
 interface BooksApiInterface {
     fun getBooks(categoryId: Int): List<Book>
-    fun searchBooks(query: String): List<Book>
+    fun searchBooks(query: String?): List<Book>
     fun allBooks(): List<Book>
 }
 
@@ -22,10 +22,15 @@ class BooksApi() : BooksApiInterface {
         }
     }
 
-    override fun searchBooks(query: String): List<Book> {
-        return books.filter {
-            it.name.contains(query) or it.author.contains(query)
+    override fun searchBooks(query: String?): List<Book> {
+        if (query == null) return allBooks()
+        val res = books.filter {
+            it.name.contains(query, ignoreCase = true) or it.author.contains(
+                query,
+                ignoreCase = true
+            )
         }
+        return res
     }
 
     companion object Books {
