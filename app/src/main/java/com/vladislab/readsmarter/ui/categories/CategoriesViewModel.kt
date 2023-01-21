@@ -3,23 +3,17 @@ package com.vladislab.readsmarter.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.vladislab.readsmarter.api.category.CategoriesApi
+import com.vladislab.readsmarter.api.category.CategoriesApiInterface
+import com.vladislab.readsmarter.api.category.Category
 
 class CategoriesViewModel : ViewModel() {
 
-    private val _items = MutableLiveData<List<String>>().apply {
-        value = arrayListOf(
-            "Бизнес",
-            "Психология",
-            "Семья и воспитание",
-            "Наука и технологии",
-            "Здоровый образ жизни",
-            "Истории успеха и биографии",
-            "Переговоры и продажи",
-            "Маркетинг и реклама",
-            "Финансы и экономика",
-            "Менеджмент и лидерство"
-        )
+    private val api: CategoriesApiInterface = CategoriesApi()
+
+    private val _items = MutableLiveData<List<Category>>().apply {
+        value = api.getCategories()
     }
 
-    val items: LiveData<List<String>> = _items
+    val items: LiveData<List<Category>> = _items
 }

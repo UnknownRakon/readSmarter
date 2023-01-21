@@ -10,4 +10,6 @@
     <color name="active_red">#AE0F09</color>
     <color name="background_search">#F5F5F5</color>
     <color name="background_card">#0DAE0F09</color>
+    <color name="book_placeholder">#D9D9D9</color>
+    <color name="books_author">#80000000</color>
 </resources>

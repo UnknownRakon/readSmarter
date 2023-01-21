@@ -1,24 +1,28 @@
-package com.vladislab.readsmarter.ui.categories
+package com.vladislab.readsmarter.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vladislab.readsmarter.api.category.Category
+import com.vladislab.readsmarter.api.books.Book
+import com.vladislab.readsmarter.ui.categories.CategoriesAdapter
 import com.vladislab.readsmarter.databinding.FragmentCategoriesBinding
+import com.vladislab.readsmarter.databinding.FragmentSearchBinding
 
 
-class CategoriesFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private var _binding: FragmentCategoriesBinding? = null
-    private lateinit var adapter: CategoriesAdapter
+    private var _binding: FragmentSearchBinding? = null
+    private lateinit var adapter: SearchAdapter
     private lateinit var recyclerView: RecyclerView
 
-    private var dataList = mutableListOf<Category>()
+    private var dataList = mutableListOf<Book>()
 
 
     private val binding get() = _binding!!
@@ -28,19 +32,18 @@ class CategoriesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val categoriesViewModel =
-            ViewModelProvider(this).get(CategoriesViewModel::class.java)
+        val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory("Красная") }
 
-        _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
         if (container?.context !== null) {
             recyclerView = binding.recyclerView
 
-            recyclerView.layoutManager = GridLayoutManager(container.context, 2)
-            adapter = CategoriesAdapter()
+            recyclerView.layoutManager = GridLayoutManager(container.context, 3)
+            adapter = SearchAdapter()
             recyclerView.adapter = adapter
 
-            categoriesViewModel.items.observe(viewLifecycleOwner) {
+            searchViewModel.items.observe(viewLifecycleOwner) {
                 it.forEach { item ->
                     dataList.add(item)
                 }
@@ -54,7 +57,6 @@ class CategoriesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        adapter.setDataList(emptyList())
         _binding = null
     }
 

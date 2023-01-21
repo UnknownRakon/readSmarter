@@ -1,17 +1,19 @@
 package com.vladislab.readsmarter.ui.catalog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SearchView
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.vladislab.readsmarter.addChildFragment
 import com.vladislab.readsmarter.databinding.FragmentCatalogBinding
 import com.vladislab.readsmarter.ui.categories.CategoriesFragment
+import com.vladislab.readsmarter.ui.search.SearchFragment
 
 
 class CatalogFragment : Fragment() {
@@ -28,7 +30,7 @@ class CatalogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val catalogViewModel =
-            ViewModelProvider(this).get(CatalogViewModel::class.java)
+            ViewModelProvider(this)[CatalogViewModel::class.java]
 
         _binding = FragmentCatalogBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -41,7 +43,27 @@ class CatalogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val childFragment = CategoriesFragment()
-        addChildFragment(childFragment, binding.subFragmentCatalog.id)
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(binding.subFragmentCatalog.id, childFragment).commit()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.println(Log.DEBUG, "log", childFragmentManager.backStackEntryCount.toString())
+                if (childFragmentManager.backStackEntryCount > 1) {
+                    childFragmentManager.popBackStackImmediate()
+                    if (!binding.booksSearchView.isIconified) {
+                        binding.booksSearchView.isIconified = true;
+                    }
+                    Log.println(Log.DEBUG, "log", "back pressed")
+                } else {
+                    isEnabled = false
+                    activity?.finish()
+                }
+            }
+        })
     }
 
 
@@ -58,6 +80,8 @@ class CatalogFragment : Fragment() {
                 0.92f
             )
             binding.sortButton.visibility = View.VISIBLE
+            val childFragment = SearchFragment()
+            addChildFragment(childFragment, binding.subFragmentCatalog.id)
             return false
         }
 
@@ -69,6 +93,9 @@ class CatalogFragment : Fragment() {
                     1f
                 )
                 binding.sortButton.visibility = View.GONE
+                val childFragment = CategoriesFragment()
+                val transaction = childFragmentManager.beginTransaction()
+                transaction.replace(binding.subFragmentCatalog.id, childFragment).commit()
             }
             return false
         }
