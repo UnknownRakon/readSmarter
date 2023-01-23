@@ -2,12 +2,11 @@ package com.vladislab.readsmarter.ui.catalog
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
@@ -18,6 +17,7 @@ import com.vladislab.readsmarter.R
 import com.vladislab.readsmarter.addChildFragment
 import com.vladislab.readsmarter.databinding.FragmentCatalogBinding
 import com.vladislab.readsmarter.ui.categories.CategoriesFragment
+import com.vladislab.readsmarter.ui.category.CategoryFragment
 import com.vladislab.readsmarter.ui.search.SearchFragment
 
 
@@ -40,10 +40,15 @@ class CatalogFragment : Fragment() {
         _binding = FragmentCatalogBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         binding.booksSearchView.setOnQueryTextListener(search)
 
         binding.sortButton.setOnClickListener {
-            val dialog = BottomSheetDialog(this.requireContext())
+            val wrappedContext = ContextThemeWrapper(
+                this.requireContext(),
+                R.style.ThemeOverlay_Demo_BottomSheetDialog
+            )
+            val dialog = BottomSheetDialog(wrappedContext)
             val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
             val btnClose = view.findViewById<ImageButton>(R.id.close_button)
             btnClose.setOnClickListener {
@@ -61,6 +66,15 @@ class CatalogFragment : Fragment() {
         val childFragment = CategoriesFragment()
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(binding.subFragmentCatalog.id, childFragment).commit()
+        childFragmentManager
+            .setFragmentResultListener("category", this) { _, bundle ->
+                val result = bundle.getInt("value")
+                Log.println(Log.DEBUG, "category", result.toString())
+                if (result != null) {
+                    val childFragment = CategoryFragment.newInstance(result)
+                    addChildFragment(childFragment, binding.subFragmentCatalog.id)
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

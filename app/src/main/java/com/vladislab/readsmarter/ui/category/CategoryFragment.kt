@@ -1,4 +1,4 @@
-package com.vladislab.readsmarter.ui.search
+package com.vladislab.readsmarter.ui.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,25 +9,27 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vladislab.readsmarter.api.books.Book
-import com.vladislab.readsmarter.databinding.FragmentSearchBinding
+import com.vladislab.readsmarter.databinding.FragmentCategoryBinding
+import com.vladislab.readsmarter.ui.search.CategoryAdapter
+import com.vladislab.readsmarter.ui.search.CategoryViewModel
 
 
-class SearchFragment : Fragment() {
+class CategoryFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private lateinit var adapter: SearchAdapter
+    private var _binding: FragmentCategoryBinding? = null
+    private lateinit var adapter: CategoryAdapter
     private lateinit var recyclerView: RecyclerView
 
     private var dataList = mutableListOf<Book>()
-    private var query: String? = null
+    private var category: Int? = null
 
     private val binding get() = _binding!!
 
     companion object {
-        fun newInstance(query: String) =
-            SearchFragment().apply {
+        fun newInstance(category: Int) =
+            CategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putString("query", query)
+                    putInt("category", category)
                 }
             }
     }
@@ -37,21 +39,25 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (arguments?.getString("query") != null) {
-            query = arguments?.getString("query")
+        if (arguments?.getInt("category") != null) {
+            category = arguments?.getInt("category")
         }
-        val searchViewModel: SearchViewModel by viewModels { SearchViewModel.Factory(query) }
+        val categoryViewModel: CategoryViewModel by viewModels {
+            CategoryViewModel.Factory(
+                category
+            )
+        }
 
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
         if (container?.context !== null) {
             recyclerView = binding.recyclerView
 
             recyclerView.layoutManager = GridLayoutManager(container.context, 3)
-            adapter = SearchAdapter()
+            adapter = CategoryAdapter()
             recyclerView.adapter = adapter
 
-            searchViewModel.items.observe(viewLifecycleOwner) {
+            categoryViewModel.items.observe(viewLifecycleOwner) {
                 it.forEach { item ->
                     dataList.add(item)
                 }

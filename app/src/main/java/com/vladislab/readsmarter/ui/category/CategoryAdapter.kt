@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vladislab.readsmarter.R
 import com.vladislab.readsmarter.api.books.Book
 
-class SearchAdapter :
-    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+class CategoryAdapter :
+    RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     private var dataList = emptyList<Book>()
 

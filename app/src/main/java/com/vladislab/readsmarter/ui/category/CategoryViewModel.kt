@@ -9,19 +9,19 @@ import com.vladislab.readsmarter.api.books.Book
 import com.vladislab.readsmarter.api.books.BooksApi
 import com.vladislab.readsmarter.api.books.BooksApiInterface
 
-class SearchViewModel(private val query: String?) : ViewModel() {
+class CategoryViewModel(private val category: Int?) : ViewModel() {
 
-    class Factory(private val query: String?) : ViewModelProvider.Factory {
+    class Factory(private val category: Int?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SearchViewModel(query) as T
+            return CategoryViewModel(category) as T
         }
     }
 
     private val api: BooksApiInterface = BooksApi()
 
     private val _items = MutableLiveData<List<Book>>().apply {
-        value = api.searchBooks(query)
+        value = api.getBooks(category)
     }
 
     val items: LiveData<List<Book>> = _items

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,27 +35,31 @@ class CategoriesFragment : Fragment() {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
         val root: View = binding.root
         if (container?.context !== null) {
-            recyclerView = binding.recyclerView
-
-            recyclerView.layoutManager = GridLayoutManager(container.context, 2)
-            adapter = CategoriesAdapter()
-            recyclerView.adapter = adapter
-
             categoriesViewModel.items.observe(viewLifecycleOwner) {
                 it.forEach { item ->
                     dataList.add(item)
                 }
             }
-            adapter.setDataList(dataList)
+            recyclerView = binding.recyclerView
+
+            recyclerView.layoutManager = GridLayoutManager(container.context, 2)
+            adapter = CategoriesAdapter(dataList) { it: Category ->
+                onItemClick(it.id)
+            }
+            recyclerView.adapter = adapter
+
         }
 
 
         return root
     }
 
+    private fun onItemClick(categoryId: Int) {
+        parentFragmentManager.setFragmentResult("category", bundleOf("value" to categoryId))
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        adapter.setDataList(emptyList())
         _binding = null
     }
 

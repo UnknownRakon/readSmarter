@@ -7,51 +7,42 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vladislab.readsmarter.R
 import com.vladislab.readsmarter.api.category.Category
+import com.vladislab.readsmarter.databinding.CategoryCardBinding
 
-class CategoriesAdapter :
+class CategoriesAdapter(
+    private var dataList: List<Category>,
+    private var onItemClicked: ((category: Category) -> Unit)
+) :
     RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
-
-    private var dataList = emptyList<Category>()
-
-    internal fun setDataList(dataList: List<Category>) {
-        this.dataList = dataList
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // Just to show as an example we took layout
+        // 'MovieItem' as recyclerview items/views.
+        val binding =
+            CategoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    // Provide a direct reference to each of the views with data items
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var title: TextView
-        var id: Int = 0
-
-        init {
-            title = itemView.findViewById(R.id.category_card_title)
-        }
-
-    }
-
-    // Usually involves inflating a layout from XML and returning the holder
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-
-        // Inflate the custom layout
-        var view =
-            LayoutInflater.from(parent.context).inflate(R.layout.category_card, parent, false)
-        return ViewHolder(view)
-    }
-
-    // Involves populating data into the item through holder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        // Get the data model based on position
-        var data = dataList[position]
-
-        // Set item views based on your views and data model
-        holder.title.text = data.name
-        holder.id = data.id
+        // getting a movie from movieList &
+        // passing in viewholder's bind function
+        holder.bind(dataList[position])
     }
 
-    //  total count of items in the list
-    override fun getItemCount() = dataList.size
+    inner class ViewHolder(val binding: CategoryCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(category: Category) = binding.apply {
+
+            categoryCardTitle.text = category.name
+
+            root.setOnClickListener {
+                onItemClicked(category)
+            }
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return dataList.size
+    }
 }

@@ -4,7 +4,7 @@ import android.util.Log
 import com.vladislab.readsmarter.R
 
 interface BooksApiInterface {
-    fun getBooks(categoryId: Int): List<Book>
+    fun getBooks(categoryId: Int?): List<Book>
     fun searchBooks(query: String?): List<Book>
     fun allBooks(): List<Book>
 }
@@ -16,7 +16,8 @@ class BooksApi() : BooksApiInterface {
         return books
     }
 
-    override fun getBooks(categoryId: Int): List<Book> {
+    override fun getBooks(categoryId: Int?): List<Book> {
+        if (categoryId == null) return allBooks()
         return books.filter {
             it.category == categoryId
         }
