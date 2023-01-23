@@ -5,11 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.vladislab.readsmarter.R
 import com.vladislab.readsmarter.addChildFragment
 import com.vladislab.readsmarter.databinding.FragmentCatalogBinding
 import com.vladislab.readsmarter.ui.categories.CategoriesFragment
@@ -37,6 +42,17 @@ class CatalogFragment : Fragment() {
 
         binding.booksSearchView.setOnQueryTextListener(search)
 
+        binding.sortButton.setOnClickListener {
+            val dialog = BottomSheetDialog(this.requireContext())
+            val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
+            val btnClose = view.findViewById<ImageButton>(R.id.close_button)
+            btnClose.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+        }
         return root
     }
 
@@ -79,6 +95,7 @@ class CatalogFragment : Fragment() {
                 binding.booksSearchView.layoutParams.height,
                 0.92f
             )
+            binding.booksSearchView.clearFocus()
             binding.sortButton.visibility = View.VISIBLE
             val childFragment = SearchFragment.newInstance(query)
             addChildFragment(childFragment, binding.subFragmentCatalog.id)
@@ -93,6 +110,7 @@ class CatalogFragment : Fragment() {
                     1f
                 )
                 binding.sortButton.visibility = View.GONE
+                binding.booksSearchView.clearFocus()
                 val childFragment = CategoriesFragment()
                 val transaction = childFragmentManager.beginTransaction()
                 transaction.replace(binding.subFragmentCatalog.id, childFragment).commit()

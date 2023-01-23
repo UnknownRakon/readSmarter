@@ -2,6 +2,7 @@ package com.vladislab.readsmarter
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
@@ -9,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.vladislab.readsmarter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +22,18 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+//        btnShowBottomSheet.setOnClickListener {
+//            val dialog = BottomSheetDialog(this)
+//            val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
+//            val btnClose = view.findViewById<Button>(R.id.close_button)
+//            btnClose.setOnClickListener {
+//                dialog.dismiss()
+//            }
+//            dialog.setCancelable(false)
+//            dialog.setContentView(view)
+//            dialog.show()
+//        }
 
         val navView: BottomNavigationView = binding.navView
 
